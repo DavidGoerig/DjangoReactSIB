@@ -1,0 +1,30 @@
+
+<h1 class="welcomepolicetitle">Connect to the platform</h1>
+
+{% if error_connexion %}
+<p><strong>Unknown user or bad password.</strong></p>
+{% endif %}
+{% if error_signup %}
+<p><strong>Unknown user or bad password.</strong></p>
+{% endif %}
+
+{% if user.is_authenticated %}
+You are already connected. {{ user.username }} !
+{% else %}
+<div>
+    <div>
+        <form method="post" action=".">
+            {% csrf_token %}
+            {{ form_connect.as_p }}
+            <input type="submit" name="connect" value="Connect" />
+        </form>
+    </div>
+    <div>
+        <form method="post" action=".">
+            {% csrf_token %}
+            {{ form_register.as_p }}
+            <input type="submit" name="register" value="Register" />
+        </form>
+    </div>
+</div>
+{% endif %}

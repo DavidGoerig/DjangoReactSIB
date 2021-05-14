@@ -14,19 +14,18 @@ class UserListCreate(generics.ListCreateAPIView):
     serializer_class = UserSerializer
 
 """
-    This function create the page for the connection.
+    This function handle connection and registration forms
     If the request method is POST (so the form return), it try to authenticate the user and if it works redirect to the home.
-    Otherwise it display the form
 
     Args:
         request: object containing view information (GET, POST, temp variables, etc).
 
     Returns:
-        render: with local variables and a link to the template: homensettings/login.html
+        render: with local variables and a link to the template
         or
         redirection to home page
 """
-def connection(request):
+def handler_connect_registration_forms(request):
     error = False
     # get the post request of the connexion
     if request.method == "POST":
@@ -34,8 +33,8 @@ def connection(request):
             # get the user form in the post request
             form_connect = ConnexionForm(request.POST)
             if form_connect.is_valid():
-                username = form.cleaned_data["username"]
-                password = form.cleaned_data["password"]
+                username = form_connect.cleaned_data["username"]
+                password = form_connect.cleaned_data["password"]
                 user = authenticate(username=username, password=password)  # are the information correct?
                 if user:  # if the object isnt None
                     login(request, user)  # we need to connect the user
@@ -59,18 +58,8 @@ def connection(request):
     else:
         form_connect = ConnexionForm()
         form_register = UserCreationForm()
+    return render(request, 'frontend/login.html', locals())
 
-    return render(request, 'login.html', locals())
-
-"""
-    This function is used to disconnect the user
-
-    Args:
-        request: object containing view information (GET, POST, temp variables, etc).
-
-    Returns:
-        redirection to connection page
-"""
-def deconnection(request):
+def disconnect_user(request):
     logout(request)
     return redirect("/login/?next=/")
