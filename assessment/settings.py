@@ -28,6 +28,13 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+if DEBUG is False:
+    REST_FRAMEWORK = {
+        'DEFAULT_RENDERER_CLASSES': (
+            'rest_framework.renderers.JSONRenderer',
+        )
+    }
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
