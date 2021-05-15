@@ -159,7 +159,7 @@ def add_user_to_list(user_list_proj, user):
     Return:
         user_dict_proj: users stored in a dictionary (updated)
 """
-def del_user_from_list(user_list_proj, user):
+def del_user_from_dict(user_list_proj, user):
     user_list_proj.pop(user.id, None)
     return user_list_proj
 
@@ -196,7 +196,7 @@ def check_and_update_project_users_adding(project, user):
 def check_and_update_project_users_delete(project, user):
     user_list_proj = from_string_to_dict(project.associated_users)
     if check_if_user_in_dict(user_list_proj, user):
-        project.associated_users = from_dict_to_string(del_user_from_list(user_list_proj, user))
+        project.associated_users = from_dict_to_string(del_user_from_dict(user_list_proj, user))
         project.save()
         return False
     else:
