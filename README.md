@@ -16,6 +16,8 @@ Run test:
 
 Build html:
 `source scripts/run_test_and_coverage.sh -html`
+
+Test all API routes using POSTMAN test collection (`test/DjangoReactJS.postman_collection.json`)
 ## How to view the documentation
 Set up sphinx and a script :)
 
