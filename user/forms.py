@@ -1,15 +1,25 @@
 from django import forms
 
-"""
-    All class for creating ORM's forms.
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
-    class Meta define:
-        which model is used
-        which fields are used
-        
-        here the field are setted more precisely (Django documentation)
+"""
+    Connexion form
 """
 
 class ConnexionForm(forms.Form):
     username = forms.CharField(label="Username", max_length=30)
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
+
+"""
+    User registration form, inherited from UserCreationFormConnexion form
+"""
+
+class UserForm(UserCreationForm):
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ('first_name','last_name', 'username', 'email', 'password1' ,'password2' )

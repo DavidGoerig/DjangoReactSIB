@@ -4,7 +4,7 @@ from rest_framework.fields import CurrentUserDefault
 from rest_framework.views import APIView
 
 """
-    This class handle the User JSON serialization used for the REST answers
+    This class handle the User JSON serialization used for the REST answers for the User Creation
 """
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,6 +17,14 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+"""
+    This class handle the User JSON serialization used for the REST answers for the User project assignation
+"""
+class UserProjectAssignSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username')
 
 """
     This class handle current user JSON serialization used for the REST answers

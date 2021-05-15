@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from .serializers import UserSerializer, CurrentUserSerializer
-from .forms import ConnexionForm
+from .forms import ConnexionForm, UserForm
 
 from assessment import const
 
@@ -73,7 +73,7 @@ def get_current_user(request):
 """
 def handler_connect_registration_forms(request):
     form_connect = ConnexionForm()
-    form_register = UserCreationForm()
+    form_register = UserForm()
     # get the post request of the connexion
     if request.method == "POST":
         if "connect" in request.POST:
@@ -112,7 +112,7 @@ def connect_user_with_forms(request, form_connect):
 """
     This function handle the user registration using the registration form
     Args:
-        form_register: connection form (UserCreationForm())
+        form_register: connection form (UserForm())
 
     Returns:
         form_register: updated form
@@ -121,7 +121,7 @@ def connect_user_with_forms(request, form_connect):
 def register_user_with_forms(request, form_register):
     error = None
     # get the user registration form in the post request
-    form_register = UserCreationForm(request.POST)
+    form_register = UserForm(request.POST)
     if form_register.is_valid():
         form_register.save()
         username = form_register.cleaned_data.get('username')

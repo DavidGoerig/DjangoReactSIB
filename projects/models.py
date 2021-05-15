@@ -10,3 +10,6 @@ class Project(models.Model):
     ), )
     name = models.CharField(max_length=512, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    # TextField containing the users using these pattern: "<id>:<username>;..."
+    ### NB: ArrayField with PostreSQL, or parsing the object to JSON / pickle is a better solution
+    associated_users = models.TextField(default="")
