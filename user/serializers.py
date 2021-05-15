@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from rest_framework.fields import CurrentUserDefault
 from rest_framework.views import APIView
 
+"""
+    This class handle the User JSON serialization used for the REST answers
+"""
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -15,6 +18,9 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+"""
+    This class handle current user JSON serialization used for the REST answers
+"""
 class CurrentUserSerializer(APIView):
     def get(self, request):
         serializer = UserSerializer(request.user, context={'request': request})

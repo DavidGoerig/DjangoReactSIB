@@ -1,6 +1,23 @@
 # Assessment Exercise - David Goerig
 
+## How to install
+Dev install:
+`source scripts/installation_script.sh`
+Build install:
+`source scripts/installation_script.sh -build`
 
+
+## How to launch
+`source scripts/launch.sh`
+
+## How to test
+Run test:
+`source scripts/run_test_and_coverage.sh `
+
+Build html:
+`source scripts/run_test_and_coverage.sh -html`
+## How to view the documentation
+Set up sphinx and a script :)
 
 ## SIB README:
 

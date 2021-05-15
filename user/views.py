@@ -60,7 +60,7 @@ def get_current_user(request):
 
 
 """
-    This function handle connection and registration forms
+    This function handle connection and registration forms requests
     If the request method is POST (so the form return), it try to authenticate the user and if it works redirect to the home.
 
     Args:
@@ -72,38 +72,72 @@ def get_current_user(request):
         redirection to home page
 """
 def handler_connect_registration_forms(request):
-    error = ""
     form_connect = ConnexionForm()
     form_register = UserCreationForm()
     # get the post request of the connexion
     if request.method == "POST":
         if "connect" in request.POST:
-            # get the user connection form in the post request
-            form_connect = ConnexionForm(request.POST)
-            if form_connect.is_valid():
-                username = form_connect.cleaned_data["username"]
-                password = form_connect.cleaned_data["password"]
-                user = authenticate(username=username, password=password)  # are the information correct?
-                if user:  # if the object isnt None
-                    login(request, user)  # we need to connect the user
-                    return redirect(index) # redirect to index in frontend view
-                else:  # otherwise display an error
-                    error = const.ERROR_CONNECTION
+            form_connect, error = connect_user_with_forms(request, form_connect)
+            if error is None:
+                return redirect(index)  # redirect to index in frontend view
         if "register" in request.POST:
-            # get the user registration form in the post request
-            form_register = UserCreationForm(request.POST)
-            if form_register.is_valid():
-                form_register.save()
-                username = form_register.cleaned_data.get('username')
-                raw_password = form_register.cleaned_data.get('password1')
-                user = authenticate(username=username, password=raw_password)
-                if user:  # if the object isnt None
-                    login(request, user)  # we need to connect the user
-                    return redirect(index)  # redirect to index in frontend view
-                else:  # otherwise display an error
-                    error = const.ERROR_CONNECTION
+            form_register, error = register_user_with_forms(request, form_register)
+            if error is None:
+                return redirect(index)  # redirect to index in frontend view
     return render(request, 'frontend/login.html', locals())
 
+"""
+    This function handle the user connection using the connection form
+    Args:
+        form_connect: connection form (user/forms.py: ConnexionForm)
+
+    Returns:
+        form_connect: updated form
+        error: error message to display
+"""
+def connect_user_with_forms(request, form_connect):
+    error = None
+    # get the user connection form in the post request
+    form_connect = ConnexionForm(request.POST)
+    if form_connect.is_valid():
+        username = form_connect.cleaned_data["username"]
+        password = form_connect.cleaned_data["password"]
+        user = authenticate(username=username, password=password)  # are the information correct?
+        if user:  # if the object isnt None
+            login(request, user)  # we need to connect the user
+        else:  # otherwise display an error
+            error = const.ERROR_CONNECTION
+    return form_connect, error
+
+"""
+    This function handle the user registration using the registration form
+    Args:
+        form_register: connection form (UserCreationForm())
+
+    Returns:
+        form_register: updated form
+        error: error message to display
+"""
+def register_user_with_forms(request, form_register):
+    error = None
+    # get the user registration form in the post request
+    form_register = UserCreationForm(request.POST)
+    if form_register.is_valid():
+        form_register.save()
+        username = form_register.cleaned_data.get('username')
+        raw_password = form_register.cleaned_data.get('password1')
+        user = authenticate(username=username, password=raw_password)
+        if user:  # if the object isnt None
+            login(request, user)  # we need to connect the user
+        else:  # otherwise display an error
+            error = const.ERROR_REGISTRATION
+    return form_register, error
+
+"""
+    This function handle the user disconnection
+    Returns:
+        redirect: to login next
+"""
 def disconnect_user(request):
     logout(request)
     return redirect("/login/?next=/")
