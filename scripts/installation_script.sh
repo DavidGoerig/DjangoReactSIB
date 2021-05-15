@@ -10,6 +10,7 @@ function installit {
   # Installation of the dependencies
   pip3 install --upgrade pip
   pip3 install -r requirements/requirements.txt
+  cd frontend
   if [ $# -ne 2 ]; then
     if [ "$1" != "-build" ]; then
       npm i webpack webpack-cli --save-build

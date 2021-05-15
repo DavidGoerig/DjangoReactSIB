@@ -6,4 +6,4 @@ from .models import Project
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ('key', 'name')
+        fields = ('key', 'name', 'associated_users')

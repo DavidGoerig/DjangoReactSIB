@@ -1,25 +1,51 @@
 
-<h1 class="welcomepolicetitle">Connect to the platform</h1>
-
-<p><strong>{{ error }}</strong></p>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Welcome to the login page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/static/css/login.css">
+</head>
+<body>
 {% if user.is_authenticated %}
-You are already connected. {{ user.username }} !
+ERROR: You should not be here. You are already connected. {{ user.username }} !
 {% else %}
-<div>
-    <div>
-        <form method="post" action=".">
+<div class="container-fluid">
+  <div class="row content">
+      <p><strong>{{ error }}</strong></p>
+    <div class="col-sm-4 sidenav">
+      <h2>Connect to the application:</h2>
+      <h4><small><span class="label label-primary">Hint</span> admin admin works pretty well if needed</small></h4><br>
+      <form method="post" action=".">
             {% csrf_token %}
             {{ form_connect.as_p }}
             <input type="submit" name="connect" value="Connect" />
         </form>
     </div>
-    <div>
-        <form method="post" action=".">
-            {% csrf_token %}
-            {{ form_register.as_p }}
-            <input type="submit" name="register" value="Register" />
-        </form>
+
+    <div class="col-sm-8">
+        <h2>Register:</h2>
+        <hr>
+      <h4><small><span class="label label-danger">Secure</span> All password and users information are only stored on the local database.</small></h4>
+      <hr>
+      <form method="post" action=".">
+          {% csrf_token %}
+          {{ form_register.as_p }}
+          <input type="submit" name="register" value="Register" />
+      </form>
     </div>
+  </div>
 </div>
+
+<footer class="container-fluid">
+  <p>Created by David Goerig for SIB interview process. </p>
+    <h5><span class="glyphicon glyphicon-time"></span> May 16, 2021.</h5>
+</footer>
+
 {% endif %}
+</body>
+</html>

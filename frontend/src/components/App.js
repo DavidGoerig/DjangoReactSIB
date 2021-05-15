@@ -37,7 +37,7 @@ class App extends Component {
                 {this.state.data.map(project => {
                     return (
                         <li key={project.id}>
-                            {project.key} - {project.name}
+                            {project.key} --- {project.name} --- {project.associated_users}
                         </li>
                     );
                 })}
