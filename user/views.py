@@ -1,17 +1,63 @@
 from django.shortcuts import render, redirect
-from .serializers import UserSerializer
-from rest_framework import generics
+
+from .serializers import UserSerializer, CurrentUserSerializer
 from .forms import ConnexionForm
+
+from assessment import const
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
-from .forms import ConnexionForm
+
 from frontend.views import index
 
+from rest_framework import generics
+from rest_framework.decorators import api_view
+from rest_framework import viewsets
+from rest_framework.response import Response
+
+"""
+    User list creation API route
+    Inherit:
+        ListCreateAPIView: Used for read-write endpoints to represent a collection of model
+        instances.Provides get and post method handlers.
+    Returns:
+        UserSerializer (id, first_Name, last_name, email, password, username)
+"""
 class UserListCreate(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+"""
+    current user get API route
+    Returns:
+        Response (JSON): the current user if it exist, the object filled with "Not defined now" otherwise
+"""
+@api_view(['GET'])
+def get_current_user(request):
+    # a boolean to check if ser exist to cm
+    user_exist = True
+    try:
+        user = request.user
+    except UserProfile.DoesNotExist:
+        user_exist = False
+    # Return NULL or Anonymous user
+    if not user_exist or request.user.is_anonymous:
+        return Response({
+            'username': "Not defined now",
+            'first_name': "Not defined now",
+            'last_name': "Not defined now",
+            'email': "Not defined now",
+        })
+    # Return founded user
+    return Response({
+        'username': user.username,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'email': user.email,
+    })
+
 
 """
     This function handle connection and registration forms
@@ -26,11 +72,13 @@ class UserListCreate(generics.ListCreateAPIView):
         redirection to home page
 """
 def handler_connect_registration_forms(request):
-    error = False
+    error = ""
+    form_connect = ConnexionForm()
+    form_register = UserCreationForm()
     # get the post request of the connexion
     if request.method == "POST":
         if "connect" in request.POST:
-            # get the user form in the post request
+            # get the user connection form in the post request
             form_connect = ConnexionForm(request.POST)
             if form_connect.is_valid():
                 username = form_connect.cleaned_data["username"]
@@ -40,24 +88,20 @@ def handler_connect_registration_forms(request):
                     login(request, user)  # we need to connect the user
                     return redirect(index) # redirect to index in frontend view
                 else:  # otherwise display an error
-                    error_connexion = True
+                    error = const.ERROR_CONNECTION
         if "register" in request.POST:
-            # get the user form in the post request
+            # get the user registration form in the post request
             form_register = UserCreationForm(request.POST)
             if form_register.is_valid():
                 form_register.save()
                 username = form_register.cleaned_data.get('username')
                 raw_password = form_register.cleaned_data.get('password1')
                 user = authenticate(username=username, password=raw_password)
-                login(request, user)
                 if user:  # if the object isnt None
                     login(request, user)  # we need to connect the user
                     return redirect(index)  # redirect to index in frontend view
                 else:  # otherwise display an error
-                    error_signup = True
-    else:
-        form_connect = ConnexionForm()
-        form_register = UserCreationForm()
+                    error = const.ERROR_CONNECTION
     return render(request, 'frontend/login.html', locals())
 
 def disconnect_user(request):

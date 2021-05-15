@@ -1,12 +1,7 @@
 
 <h1 class="welcomepolicetitle">Connect to the platform</h1>
 
-{% if error_connexion %}
-<p><strong>Unknown user or bad password.</strong></p>
-{% endif %}
-{% if error_signup %}
-<p><strong>Unknown user or bad password.</strong></p>
-{% endif %}
+<p><strong>{{ error }}</strong></p>
 
 {% if user.is_authenticated %}
 You are already connected. {{ user.username }} !
