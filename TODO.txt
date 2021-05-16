@@ -1,0 +1,11 @@
+frontend:
+
+bouton pour disconnect (lien vers /disconnect)
+
+form pour créer un projet (requête Get avec key et name /api/projects un truc comme ça)
+
+form pour ajouter un user au projet (le sien ou un dans la liste des noms)
+form pour delete un user au projet
+
+
+RENAME COMPONENT (Navbar, project_box, etc)

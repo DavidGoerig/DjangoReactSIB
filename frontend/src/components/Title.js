@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
-import { Navbar, Nav, NavItem, NavDropdown } from 'react-bootstrap';
+import { Navbar} from 'react-bootstrap';
 
 class Title extends Component {
     constructor(props) {
@@ -56,6 +56,8 @@ class Title extends Component {
 
     )}
 }
+
+
 
 export default Title;
 
