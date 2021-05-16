@@ -68,12 +68,10 @@ class ProjectCreate extends Component {
 
     fetch('api/project/', requestOptions)
         .then(res => {
-            console.log("BEFOREdddees FETCH")
             this.fetchDataApp();
             if (res.status >= 400) {
                 this.state.placeholder = "Something went wrong! (project already created)"
             }
-            console.log("BE FETsCH")
               if(!res.ok) {
                 res.text().then(text => throw Error(text))
                }
