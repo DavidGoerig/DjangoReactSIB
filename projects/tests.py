@@ -6,6 +6,10 @@ class FakeUserClass:
     self.id = id
     self.username = username
 
+
+"""
+    Test of project view functions
+"""
 class ProjectsModelTest(TestCase):
 
     def test_del_user_from_list(self):

@@ -1,9 +1,19 @@
+/**
+ * Class (Component) aiming to handle projects interaction (form, request)
+ * @author David Goerig <davidgoerig68@gmail.com>
+ */
+
 import React, { Component } from 'react';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
+
 class ProjectCreationHolder extends Component {
+    /**
+     * constructor, bind fetch data method with prop
+     * @param {list}props  - properties of react component
+     */
   constructor(props) {
       super(props);
       this.fetchDataApp = props.fetchDataApp.bind(this);
@@ -15,10 +25,13 @@ class ProjectCreationHolder extends Component {
             placeholder: "",
       };
       this.handleChangeName = this.handleChangeName.bind(this);
-      this.handleChangeTag = this.handleChangeTag.bind(this);
+      this.handleChangeKey = this.handleChangeKey.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+    /**
+     * called after the component is rendered, we are getting the user
+     */
   componentDidMount() {
         fetch("api/user/current")
             .then(response => {
@@ -39,15 +52,30 @@ class ProjectCreationHolder extends Component {
             });
     }
 
+    /**
+     * handle name changing in the form and set the state to keep track
+     * @param {event}  event - form event
+     * @return {void}
+     */
   handleChangeName(event) {
       this.setState({name: event.target.value});
   }
 
-  handleChangeTag(event) {
+    /**
+     * handle key changing in the form and set the state to keep track
+     * @param {event}  event - form event
+     * @return {void}
+     */
+  handleChangeKey(event) {
       this.setState({tag: event.target.value});
   }
 
-
+    /**
+     * handle form submit and request the api to create project at api/project/
+     * we get CSRF token for secure request and authenticate
+     * @param{event}  event - form event
+     * @return {void}
+     */
   handleSubmit(event) {
       var csrftoken = cookies.get('csrftoken');
       const requestOptions = {
@@ -77,13 +105,17 @@ class ProjectCreationHolder extends Component {
       event.preventDefault();
   }
 
+    /**
+     * render
+     * @return {html}
+     */
   render() {
       return [
           <h4><small>{this.state.placeholder}</small></h4>,
           <h3>Create new project</h3>,
           <form onSubmit={this.handleSubmit}>
               <label>Name:<input type="text" value={this.state.name} onChange={this.handleChangeName} /></label>
-              <label>Tag:<input type="text" value={this.state.tag} onChange={this.handleChangeTag} /></label>
+              <label>Tag:<input type="text" value={this.state.tag} onChange={this.handleChangeKey} /></label>
               <input type="submit" value="Submit" />
           </form>
       ];

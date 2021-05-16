@@ -3,6 +3,10 @@ import {render} from "react-dom";
 import { Navbar} from 'react-bootstrap';
 
 class TitleAndNavBarHolder extends Component {
+    /**
+     * constructor, bind fetch data method with prop
+     * @param {list}props  - properties of react component
+     */
     constructor(props) {
         super(props);
         this.state = {
@@ -12,6 +16,9 @@ class TitleAndNavBarHolder extends Component {
         };
     }
 
+    /**
+     * called after the component is rendered, we are getting the current user to fill title
+     */
     componentDidMount() {
         fetch("api/user/current")
             .then(response => {
@@ -32,6 +39,10 @@ class TitleAndNavBarHolder extends Component {
             });
     }
 
+    /**
+     * render
+     * @return {html}
+     */
     render() {
         return (
              <>

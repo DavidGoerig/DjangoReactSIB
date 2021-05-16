@@ -1,3 +1,7 @@
+/**
+ * Class (Component) aiming to handle projects interaction with user and display of the toasts (form, request)
+ * @author David Goerig <davidgoerig68@gmail.com>
+ */
 import React, {Component} from "react";
 import {render} from "react-dom";
 import ProjectCreationHolder from "./ProjectCreationHolder";
@@ -12,6 +16,10 @@ import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
 class ProjectsHolder extends Component {
+    /**
+     * constructor create state to keep track on data
+     * @param {list}props  - properties of react component
+     */
     constructor(props) {
         super(props);
         this.string_to_dict = this.string_to_dict.bind(this);
@@ -31,6 +39,10 @@ class ProjectsHolder extends Component {
         };
     }
 
+    /**
+     * fetch project data at api/project (Get request) and feed data, loaded and placeholder
+     * @return: {void}
+     */
     fetchDataProjects() {
         fetch("api/project")
             .then(response => {
@@ -50,7 +62,10 @@ class ProjectsHolder extends Component {
                 });
             });
     }
-
+    /**
+     * fetch user data at api/user/ (Get request) and feed users
+     * @return: {void}
+     */
     fetchUsers() {
         fetch("api/user/")
             .then(response => {
@@ -70,16 +85,24 @@ class ProjectsHolder extends Component {
             });
     }
 
+    /**
+     * called after the component is rendered, we are getting the user, call fetch functions
+     */
     componentDidMount() {
         this.fetchDataProjects()
         this.fetchUsers()
     }
 
+    /**
+     * transform a string like "<id>:<username>;..." to dictionary
+     * @param: {string} string - string containing users
+     * @return: {dict} user_dict - containing users
+     */
     string_to_dict(string) {
-        let user_dict = []
+        let user_dict = [] // TODO not a dictionary but an array in the end, need to refactor
         if (string === "") return user_dict;
         let splitted = string.split(";")
-        for (var i = 0; i < splitted.length; i++) {
+        for (let i = 0; i < splitted.length; i++) {
             const [id, username] = splitted[i].split(':')
             user_dict.push({
                 id:   id,
@@ -89,6 +112,10 @@ class ProjectsHolder extends Component {
         return user_dict
     }
 
+    /**
+     * POST request to delete project
+     * @param {string} project_name - project name
+     */
     delete_project(project_name) {
         var csrftoken = cookies.get('csrftoken');
         const requestOptions = {
@@ -116,6 +143,13 @@ class ProjectsHolder extends Component {
             });
     }
 
+    /**
+     *  request to delete or add user to project. handle post and put request, on different routes
+     * @param {string} username - username
+     * @param {string} project_name - project name
+     * @param {string} route - route of the request
+     * @param {string} method - method of the request
+     */
     add_or_delete_user_from_project(username, project_name, route, method) {
         var csrftoken = cookies.get('csrftoken');
         const requestOptions = {
@@ -143,16 +177,29 @@ class ProjectsHolder extends Component {
             });
     }
 
-
+    /**
+     *  handler for buttons
+     * @param username
+     * @param project_name
+     */
     add_user_to_project(username, project_name) {
         this.add_or_delete_user_from_project(username, project_name, 'api/project/adduser', 'PUT')
     }
 
+    /**
+     * handler for button
+     * @param username
+     * @param project_name
+     */
     delete_user_from_project(username, project_name) {
         this.add_or_delete_user_from_project(username, project_name, 'api/project/deluser', 'POST')
     }
 
-
+    /**
+     * render function
+     * NB: really too long, need to split it in 2 more components (AddUser, UserAssigned)
+     * @returns {*[]} multiple container
+     */
     render() {
         return [
             <ProjectCreationHolder fetchDataApp={this.fetchDataProjects}/>,

@@ -49,16 +49,14 @@ def get_current_user(request):
             'username': "Not defined now",
             'first_name': "Not defined now",
             'last_name': "Not defined now",
-            'email': "Not defined now",
-            'CSRF': "Not defined now"
+            'email': "Not defined now"
         })
     # Return founded user
     return Response({
         'username': user.username,
         'first_name': user.first_name,
         'last_name': user.last_name,
-        'email': user.email,
-        'CSRF': get_token(request)
+        'email': user.email
     })
 
 
