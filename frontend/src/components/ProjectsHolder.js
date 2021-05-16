@@ -230,7 +230,7 @@ class ProjectsHolder extends Component {
                                                                     <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
                                                                         <strong className="mr-auto">{user.username}</strong>
                                                                         <small>id: {user.id}</small>
-                                                                </Toast.Header>,
+                                                                </Toast.Header>
                                                                 <Toast.Body>
                                                                     <Button variant="primary" size="sm" onClick={this.delete_user_from_project.bind(this, user.username, project.name)}>Delete {user.username} from project</Button>
 

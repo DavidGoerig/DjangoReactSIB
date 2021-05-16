@@ -5,6 +5,8 @@ Dev install:
 `source scripts/installation_script.sh`
 Build install:
 `source scripts/installation_script.sh -build`
+## Quickstart
+`source scripts/installation_script.sh && source scripts/launch.sh`
 
 
 ## How to launch
@@ -19,7 +21,7 @@ Build html:
 
 Test all API routes using POSTMAN test collection (`test/DjangoReactJS.postman_collection.json`)
 ## How to view the documentation
-Set up sphinx and a script :)
+Need to setup sphinx
 
 ## SIB README:
 
