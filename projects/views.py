@@ -53,8 +53,14 @@ def delete_project_by_name(request):
 @api_view(['PUT'])
 def add_user_to_project(request):
     if request.method == 'PUT':
+        if 'username' not in request.data:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         username = request.data['username']
+        if 'project_name' not in request.data:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         project_name = request.data['project_name']
+        print("wtf", project_name, username)
+        print(Project.objects.all())
         try:
             project = Project.objects.get(name=project_name)
         except Project.DoesNotExist:
@@ -82,9 +88,12 @@ def add_user_to_project(request):
 @api_view(['POST']) # with DEL request it seems that the data is not in request.DATA
 def del_user_from_project(request):
     if request.method == 'POST':
+        if 'username' not in request.data:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         username = request.data['username']
-
-        project_name = request.data['project_name']
+        if 'project_name' not in request.data:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        project_name = request.data['project_name'] ## HERE
         try:
             project = Project.objects.get(name=project_name)
         except Project.DoesNotExist:

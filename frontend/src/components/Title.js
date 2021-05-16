@@ -47,7 +47,7 @@ class Title extends Component {
                     </Navbar.Brand>
                     <Navbar.Collapse className="justify-content-end">
                         <Navbar.Text>
-                          Signed in as: <span style={{ color: 'blue' }}>{this.state.data.username}</span>
+                          Signed in as: <span style={{ color: 'red' }}>{this.state.data.username}</span>
                           <p><a href="/disconnect">Disconnect</a></p>
                         </Navbar.Text>
                     </Navbar.Collapse>

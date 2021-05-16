@@ -4,15 +4,26 @@ import ProjectCreate from "./ProjectCreate";
 import { Accordion, Card, Button} from 'react-bootstrap';
 import Cookies from 'universal-cookie';
 
+/**
+ * This object need (in the end) be splitted in 2 more component: one for holding the users_to_add component
+ * and one for the users in the project.
+ */
+
 const cookies = new Cookies();
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.string_to_dict = this.string_to_dict.bind(this);
-        this.fetchData = this.fetchData.bind(this);
+        this.fetchDataProjects = this.fetchDataProjects.bind(this);
         this.delete_project = this.delete_project.bind(this);
+        this.delete_user_from_project = this.delete_user_from_project.bind(this);
+        this.add_user_to_project = this.add_user_to_project.bind(this);
+        this.fetchUsers = this.fetchUsers.bind(this);
+        this.add_or_delete_user_from_project = this.add_or_delete_user_from_project.bind(this);
+
         this.state = {
+            users: [],
             data: [],
             loaded: false,
             placeholder: "",
@@ -20,7 +31,7 @@ class App extends Component {
         };
     }
 
-    fetchData() {
+    fetchDataProjects() {
         fetch("api/project")
             .then(response => {
                 if (response.status > 400) {
@@ -39,8 +50,29 @@ class App extends Component {
                 });
             });
     }
+
+    fetchUsers() {
+        fetch("api/user/")
+            .then(response => {
+                if (response.status > 400) {
+                    return this.setState(() => {
+                        return {placeholder: "Something went wrong!"};
+                    });
+                }
+                return response.json();
+            })
+            .then(users => {
+                this.setState(() => {
+                    return {
+                        users: users
+                    };
+                });
+            });
+    }
+
     componentDidMount() {
-        this.fetchData()
+        this.fetchDataProjects()
+        this.fetchUsers()
     }
 
     string_to_dict(string) {
@@ -71,11 +103,38 @@ class App extends Component {
         fetch('api/project/delproj', requestOptions)
             .then(res => {
                 if(!res.ok) {
-                    this.fetchData();
+                    this.fetchDataProjects();
                     res.text().then(text => throw Error(text))
                 }
                 else {
-                    this.fetchData();
+                    this.fetchDataProjects();
+                    return res.json();
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+    add_or_delete_user_from_project(username, project_name, route, method) {
+        var csrftoken = cookies.get('csrftoken');
+        const requestOptions = {
+            method: method,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;',
+                'X-CSRFTOKEN': csrftoken,
+            },
+            body: JSON.stringify({ "username":username , "project_name": project_name})
+        };
+        fetch(route, requestOptions)
+            .then(res => {
+                if(!res.ok) {
+                    this.fetchDataProjects();
+                    res.text().then(text => throw Error(text))
+                }
+                else {
+                    this.fetchDataProjects();
                     return res.json();
                 }
             })
@@ -85,9 +144,18 @@ class App extends Component {
     }
 
 
+    add_user_to_project(username, project_name) {
+        this.add_or_delete_user_from_project(username, project_name, 'api/project/adduser', 'PUT')
+    }
+
+    delete_user_from_project(username, project_name) {
+        this.add_or_delete_user_from_project(username, project_name, 'api/project/deluser', 'POST')
+    }
+
+
     render() {
         return [
-            <ProjectCreate fetchDataApp={this.fetchData}/>,
+            <ProjectCreate fetchDataApp={this.fetchDataProjects}/>,
             <h4><small>{this.state.placeholder}</small></h4>,
             <Accordion>
                 {this.state.data.map(project => {
@@ -102,24 +170,39 @@ class App extends Component {
                             </Card.Header>
                             <Accordion.Collapse eventKey={project.key}>
                                 <Card.Body>
-                                    {project.associated_users}
+                                    <h3>Users in the project:</h3>
                                     <div>
                                     {
 
                                         this.dict_user_proj.map(user => {
                                             return (
                                                 <li>
-                                                    User in the proj: {user.username}
+                                                    {user.username}
+                                                    <Button variant="primary" size="sm" onClick={this.delete_user_from_project.bind(this, user.username, project.name)}>Delete {user.username} from project</Button>
                                                 </li>
                                             );
                                         })
 
                                     }
                                     </div>
+
+                                    <h3>Users to add to the project:</h3>
+                                    <div>
+                                    {
+
+                                        this.state.users.map(usr => {
+                                            return (
+                                                <li>
+                                                    {usr.username}
+                                                    <Button variant="primary" size="sm" onClick={this.add_user_to_project.bind(this, usr.username, project.name)}>Add {usr.username} to project</Button>
+                                                </li>
+                                            );
+                                        })
+
+                                    }
+                                    </div>
+
                                     <Button variant="primary" size="lg" onClick={this.delete_project.bind(this, project.name)}>Delete project</Button>
-    {/*
-                                    {' '}
-Faire un object User qui prend en param le project, qui va juste lister les users et faire un boutton par user pour la requête :)  */}
 
                                 </Card.Body>
                             </Accordion.Collapse>

@@ -14,9 +14,11 @@ function installit {
   if [ $# -ne 2 ]; then
     if [ "$1" != "-build" ]; then
       npm i webpack webpack-cli --save-build
+      npm install universal-cookie --save
     fi
   else
   npm i webpack webpack-cli --save-dev
+  npm install universal-cookie --save
   fi
   # Quit virtual env
   cd ..
