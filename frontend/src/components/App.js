@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import ProjectCreate from "./ProjectCreate";
-import { Accordion, Card, Button} from 'react-bootstrap';
+import { Accordion, Card, Button, Toast, Container, Col, Row} from 'react-bootstrap';
 import Cookies from 'universal-cookie';
 
 /**
@@ -170,37 +170,61 @@ class App extends Component {
                             </Card.Header>
                             <Accordion.Collapse eventKey={project.key}>
                                 <Card.Body>
-                                    <h3>Users in the project:</h3>
-                                    <div>
-                                    {
+                                    <h5>Users associated to the project:</h5>
+                                    <Container fluid="md">
+                                        <Row>
+                                            {
 
-                                        this.dict_user_proj.map(user => {
-                                            return (
-                                                <li>
-                                                    {user.username}
-                                                    <Button variant="primary" size="sm" onClick={this.delete_user_from_project.bind(this, user.username, project.name)}>Delete {user.username} from project</Button>
-                                                </li>
-                                            );
-                                        })
+                                                this.dict_user_proj.map(user => {
+                                                    return [
+                                                        <Col>
+                                                            <Toast>
+                                                                <Toast.Header>
+                                                                    <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
+                                                                        <strong className="mr-auto">{user.username}</strong>
+                                                                        <small>id: {user.id}</small>
+                                                                </Toast.Header>,
+                                                                <Toast.Body>
+                                                                    <Button variant="primary" size="sm" onClick={this.delete_user_from_project.bind(this, user.username, project.name)}>Delete {user.username} from project</Button>
 
-                                    }
-                                    </div>
+                                                                </Toast.Body>
+                                                            </Toast>
+                                                        </Col>
+                                                    ];
+                                                })
 
-                                    <h3>Users to add to the project:</h3>
-                                    <div>
-                                    {
+                                            }
+                                        </Row>
+                                    </Container>
 
-                                        this.state.users.map(usr => {
-                                            return (
-                                                <li>
-                                                    {usr.username}
-                                                    <Button variant="primary" size="sm" onClick={this.add_user_to_project.bind(this, usr.username, project.name)}>Add {usr.username} to project</Button>
-                                                </li>
-                                            );
-                                        })
+                                    <h5>Users to add to the project:</h5>
+                                    <Container fluid="md">
+                                        <Row>
+                                        {
 
-                                    }
-                                    </div>
+                                            this.state.users.map(usr => {
+                                                return [
+                                                    <Col>
+                                                        <Toast>
+                                                            <Toast.Header>
+                                                                <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
+                                                                    <strong className="mr-auto">{usr.username}</strong>
+                                                                    <small>id: {usr.id}</small>
+                                                            </Toast.Header>
+                                                            <Toast.Body>
+                                                                <p>First name: <span>{usr.first_name}</span></p>
+                                                                <p>Last name: <span>{usr.last_name}</span></p>
+                                                                <p>Email: <span>{usr.email}</span></p>
+                                                                <Button variant="primary" size="sm" onClick={this.add_user_to_project.bind(this, usr.username, project.name)}>Add {usr.username} to project</Button>
+                                                            </Toast.Body>
+                                                        </Toast>
+                                                    </Col>
+                                                ];
+                                            })
+
+                                        }
+                                        </Row>
+                                    </Container>
 
                                     <Button variant="primary" size="lg" onClick={this.delete_project.bind(this, project.name)}>Delete project</Button>
 
