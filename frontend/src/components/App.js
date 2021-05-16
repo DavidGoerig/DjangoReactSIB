@@ -2,12 +2,16 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import ProjectCreate from "./ProjectCreate";
 import { Accordion, Card, Button} from 'react-bootstrap';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.string_to_dict = this.string_to_dict.bind(this);
         this.fetchData = this.fetchData.bind(this);
+        this.delete_project = this.delete_project.bind(this);
         this.state = {
             data: [],
             loaded: false,
@@ -53,6 +57,33 @@ class App extends Component {
         return user_dict
     }
 
+    delete_project(project_name) {
+        var csrftoken = cookies.get('csrftoken');
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json; charset=UTF-8',
+                'X-CSRFTOKEN': csrftoken,
+            },
+            body: JSON.stringify({ "name": project_name})
+        };
+        fetch('api/project/delproj', requestOptions)
+            .then(res => {
+                if(!res.ok) {
+                    this.fetchData();
+                    res.text().then(text => throw Error(text))
+                }
+                else {
+                    this.fetchData();
+                    return res.json();
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
 
     render() {
         return [
@@ -85,8 +116,9 @@ class App extends Component {
 
                                     }
                                     </div>
+                                    <Button variant="primary" size="lg" onClick={this.delete_project.bind(this, project.name)}>Delete project</Button>
     {/*
-                                    <Button variant="primary" size="lg" onClick={this.deleteRow.bind(this, id)}>Delete project</Button>{' '}
+                                    {' '}
 Faire un object User qui prend en param le project, qui va juste lister les users et faire un boutton par user pour la requête :)  */}
 
                                 </Card.Body>
