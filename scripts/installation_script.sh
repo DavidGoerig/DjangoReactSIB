@@ -19,6 +19,7 @@ function installit {
   npm i webpack webpack-cli --save-dev
   fi
   # Quit virtual env
+  cd ..
   deactivate
 }
 

@@ -1,19 +1,21 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
+import ProjectCreate from "./ProjectCreate";
 
 class App extends Component {
     constructor(props) {
         super(props);
+        this.string_to_dict = this.string_to_dict.bind(this);
+        this.fetchData = this.fetchData.bind(this);
         this.state = {
             data: [],
             loaded: false,
-            placeholder: "Loading",
+            placeholder: "",
             dict_user_proj: {}
         };
-        this.string_to_dict = this.string_to_dict.bind(this);
     }
 
-    componentDidMount() {
+    fetchData() {
         fetch("api/project")
             .then(response => {
                 if (response.status > 400) {
@@ -26,11 +28,14 @@ class App extends Component {
             .then(data => {
                 this.setState(() => {
                     return {
-                        data,
+                        data: data,
                         loaded: true
                     };
                 });
             });
+    }
+    componentDidMount() {
+        this.fetchData()
     }
 
     string_to_dict(string) {
@@ -48,11 +53,14 @@ class App extends Component {
     }
 
     render() {
-        return (
+        return [
+            <ProjectCreate fetchDataApp={this.fetchData}/>,
+            <h4><small>{this.state.placeholder}</small></h4>,
             <ul>
                 {this.state.data.map(project => {
                     this.dict_user_proj = this.string_to_dict(project.associated_users)
                     return (
+
                         <li key={project.id}>
                             {project.key} --- {project.name} --- {project.associated_users}
                             <div>
@@ -73,7 +81,7 @@ class App extends Component {
                     );
                 })}
             </ul>
-        );
+        ];
     }
 }
 

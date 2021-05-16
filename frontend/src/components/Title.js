@@ -58,7 +58,6 @@ class Title extends Component {
 }
 
 
-
 export default Title;
 
 const container = document.getElementById("welcome_title");

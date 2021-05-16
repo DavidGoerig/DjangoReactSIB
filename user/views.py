@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
+from django.middleware.csrf import get_token
 
 from frontend.views import index
 
@@ -49,6 +50,7 @@ def get_current_user(request):
             'first_name': "Not defined now",
             'last_name': "Not defined now",
             'email': "Not defined now",
+            'CSRF': "Not defined now"
         })
     # Return founded user
     return Response({
@@ -56,6 +58,7 @@ def get_current_user(request):
         'first_name': user.first_name,
         'last_name': user.last_name,
         'email': user.email,
+        'CSRF': get_token(request)
     })
 
 

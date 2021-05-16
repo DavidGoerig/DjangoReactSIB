@@ -1,23 +1,19 @@
 import React, { Component } from 'react';
 import {render} from "react-dom";
 
-
 import Cookies from 'universal-cookie';
-import App from "./App";
 
 const cookies = new Cookies();
 
 class ProjectCreate extends Component {
   constructor(props) {
     super(props);
-    this.fetchDataApp = props.fetchDataApp.bind(this);
 
     this.state = {
             data: [],
             loaded: false,
             name: "",
-            tag: "",
-            placeholder: "",
+            tag: ""
     };
 
     this.handleChangeName = this.handleChangeName.bind(this);
@@ -57,43 +53,37 @@ class ProjectCreate extends Component {
   handleSubmit(event) {
       var csrftoken = cookies.get('csrftoken');
     const requestOptions = {
-        method: 'POST',
+        method: 'PUT',
         headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json; charset=UTF-8',
         'X-CSRFTOKEN': csrftoken,
         },
-        body: JSON.stringify({ "name": this.state.name , "key": this.state.tag})
+        body: JSON.stringify({ "username": this.state.name , "project_name": this.state.tag})
     };
 
-    fetch('api/project/', requestOptions)
+    fetch('api/project/adduser', requestOptions)
         .then(res => {
-            console.log("BEFOREdddees FETCH")
-            this.fetchDataApp();
-            if (res.status >= 400) {
-                this.state.placeholder = "Something went wrong! (project already created)"
-            }
-            console.log("BE FETsCH")
-              if(!res.ok) {
-                res.text().then(text => throw Error(text))
-               }
-              else {
-               return res.json();
-             }
-        })
-        .catch(err => {
-            this.state.placeholder = "Something went wrong! "+ err;
-        })
+      if(!res.ok) {
+        res.text().then(text => throw Error(text))
+       }
+      else {
+       return res.json();
+     }
+    })
+    .catch(err => {
+       console.log('caught it!',err);
+    })
+
     event.preventDefault();
   }
 
   render() {
-    return [
-            <h4><small>{this.state.placeholder}</small></h4>,
+    return (
         <h3>Create new project</h3>,
-        <form onSubmit={this.handleSubmit}>
-            <label>
-                Name:
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name:
           <input type="text" value={this.state.name} onChange={this.handleChangeName} />
         </label>
           <label>
@@ -102,9 +92,10 @@ class ProjectCreate extends Component {
         </label>
         <input type="submit" value="Submit" />
       </form>
-    ];
+    );
   }
 }
 
-
 export default ProjectCreate;
+
+const container = document.getElementById("project_create");

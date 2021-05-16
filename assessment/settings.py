@@ -76,6 +76,8 @@ TEMPLATES = [
     },
 ]
 
+
+
 WSGI_APPLICATION = 'assessment.wsgi.application'
 
 # Database

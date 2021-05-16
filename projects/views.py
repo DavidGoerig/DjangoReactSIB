@@ -11,7 +11,6 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 
-
 class ProjectListCreate(generics.ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -25,6 +24,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             - 406 if user already in project
             - 404 if user or project doesn't exist
 """
+
 @api_view(['PUT'])
 def add_user_to_project(request):
     if request.method == 'PUT':
