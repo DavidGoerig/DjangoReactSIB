@@ -3,7 +3,6 @@ import {render} from "react-dom";
 
 
 import Cookies from 'universal-cookie';
-import App from "./App";
 
 const cookies = new Cookies();
 

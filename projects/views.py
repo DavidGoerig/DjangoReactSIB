@@ -14,8 +14,33 @@ from rest_framework import status
 class ProjectListCreate(generics.ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+
+
 """
-    API view PUT at 'api/project/adduser'
+    API request DEL at 'api/project/delproj'
+    Aim to add del project
+    Return:
+        Response:
+            - 202 if proj deleted
+            - 404 if project doesn't exist
+"""
+
+
+@api_view(['POST'])
+def delete_project_by_name(request):
+    if request.method == 'POST':
+        if 'name' not in request.data:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        project_name = request.data['name'] # TODO: check if exist it list, return HTTP 404 otherwise
+        try:
+            Project.objects.filter(name=project_name).delete()
+        except Project.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_202_ACCEPTED)
+
+
+"""
+    API request PUT at 'api/project/adduser'
     Aim to add a user to a project if: user exist, project exist, user not already in project
     
     Return:
@@ -45,7 +70,7 @@ def add_user_to_project(request):
 
 
 """
-    API view PUT at 'api/project/deluser'
+    API request PUT at 'api/project/deluser'
     Aim to del a user from a project if: user exist, project exist, user already in project
 
     Return:

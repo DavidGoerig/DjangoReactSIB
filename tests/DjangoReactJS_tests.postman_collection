@@ -15,7 +15,7 @@
 					"formdata": [
 						{
 							"key": "username",
-							"value": "admin",
+							"value": "User1",
 							"type": "text"
 						},
 						{
@@ -26,7 +26,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/project/adduser?username=admin&project_name=NewP",
+					"raw": "http://127.0.0.1:8000/api/project/adduser",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -39,16 +39,6 @@
 						"api",
 						"project",
 						"adduser"
-					],
-					"query": [
-						{
-							"key": "username",
-							"value": "admin"
-						},
-						{
-							"key": "project_name",
-							"value": "NewP"
-						}
 					]
 				},
 				"description": "test adding an user"
@@ -76,7 +66,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/project/adduser?username=admin&project_name=NewP",
+					"raw": "http://127.0.0.1:8000/api/project/adduser",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -89,16 +79,6 @@
 						"api",
 						"project",
 						"adduser"
-					],
-					"query": [
-						{
-							"key": "username",
-							"value": "admin"
-						},
-						{
-							"key": "project_name",
-							"value": "NewP"
-						}
 					]
 				},
 				"description": "test adding an user"
@@ -126,7 +106,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/project/deluser?username=admin&project_name=NewP",
+					"raw": "http://127.0.0.1:8000/api/project/deluser",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -139,16 +119,6 @@
 						"api",
 						"project",
 						"deluser"
-					],
-					"query": [
-						{
-							"key": "username",
-							"value": "admin"
-						},
-						{
-							"key": "project_name",
-							"value": "NewP"
-						}
 					]
 				},
 				"description": "test adding an user"
@@ -158,14 +128,14 @@
 		{
 			"name": "Test del User1 from NewP",
 			"request": {
-				"method": "PUT",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "formdata",
 					"formdata": [
 						{
 							"key": "username",
-							"value": "admin",
+							"value": "User1",
 							"type": "text"
 						},
 						{
@@ -176,7 +146,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/project/adduser?username=admin&project_name=NewP",
+					"raw": "http://127.0.0.1:8000/api/project/deluser",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -188,20 +158,88 @@
 					"path": [
 						"api",
 						"project",
-						"adduser"
-					],
-					"query": [
-						{
-							"key": "username",
-							"value": "admin"
-						},
-						{
-							"key": "project_name",
-							"value": "NewP"
-						}
+						"deluser"
 					]
 				},
 				"description": "test adding an user"
+			},
+			"response": []
+		},
+		{
+			"name": "Create project Another",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Another",
+							"type": "text"
+						},
+						{
+							"key": "key",
+							"value": "another",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/project/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"project",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteproj",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Another",
+							"type": "text"
+						},
+						{
+							"key": "key",
+							"value": "another",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/project/delproj",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"project",
+						"delproj"
+					]
+				}
 			},
 			"response": []
 		}

@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import ProjectCreate from "./ProjectCreate";
+import { Accordion, Card, Button} from 'react-bootstrap';
 
 class App extends Component {
     constructor(props) {
@@ -52,19 +53,27 @@ class App extends Component {
         return user_dict
     }
 
+
     render() {
         return [
             <ProjectCreate fetchDataApp={this.fetchData}/>,
             <h4><small>{this.state.placeholder}</small></h4>,
-            <ul>
+            <Accordion>
                 {this.state.data.map(project => {
                     this.dict_user_proj = this.string_to_dict(project.associated_users)
                     return (
-
-                        <li key={project.id}>
-                            {project.key} --- {project.name} --- {project.associated_users}
-                            <div>
-                                {
+                         <Card>
+                            <Card.Header>
+                              <Accordion.Toggle as={Button} variant="link" eventKey={project.key}>
+                                    <p>{project.name}</p>
+                                    <p><small>{project.key}</small></p>
+                              </Accordion.Toggle>
+                            </Card.Header>
+                            <Accordion.Collapse eventKey={project.key}>
+                                <Card.Body>
+                                    {project.associated_users}
+                                    <div>
+                                    {
 
                                         this.dict_user_proj.map(user => {
                                             return (
@@ -75,12 +84,17 @@ class App extends Component {
                                         })
 
                                     }
-                            </div>
+                                    </div>
+    {/*
+                                    <Button variant="primary" size="lg" onClick={this.deleteRow.bind(this, id)}>Delete project</Button>{' '}
+Faire un object User qui prend en param le project, qui va juste lister les users et faire un boutton par user pour la requête :)  */}
 
-                        </li>
+                                </Card.Body>
+                            </Accordion.Collapse>
+                         </Card>
                     );
                 })}
-            </ul>
+            </Accordion>
         ];
     }
 }
