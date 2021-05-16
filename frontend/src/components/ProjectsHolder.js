@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
-import ProjectCreate from "./ProjectCreate";
+import ProjectCreationHolder from "./ProjectCreationHolder";
 import { Accordion, Card, Button, Toast, Container, Col, Row} from 'react-bootstrap';
 import Cookies from 'universal-cookie';
 
@@ -11,7 +11,7 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-class App extends Component {
+class ProjectsHolder extends Component {
     constructor(props) {
         super(props);
         this.string_to_dict = this.string_to_dict.bind(this);
@@ -155,7 +155,7 @@ class App extends Component {
 
     render() {
         return [
-            <ProjectCreate fetchDataApp={this.fetchDataProjects}/>,
+            <ProjectCreationHolder fetchDataApp={this.fetchDataProjects}/>,
             <h4><small>{this.state.placeholder}</small></h4>,
             <Accordion>
                 {this.state.data.map(project => {
@@ -239,7 +239,7 @@ class App extends Component {
 }
 
 
-export default App;
+export default ProjectsHolder;
 
 const container = document.getElementById("app");
-render(<App/>, container);
+render(<ProjectsHolder/>, container);

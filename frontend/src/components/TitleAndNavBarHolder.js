@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import { Navbar} from 'react-bootstrap';
 
-class Title extends Component {
+class TitleAndNavBarHolder extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -58,7 +58,7 @@ class Title extends Component {
 }
 
 
-export default Title;
+export default TitleAndNavBarHolder;
 
 const container = document.getElementById("welcome_title");
-render(<Title/>, container);
+render(<TitleAndNavBarHolder/>, container);

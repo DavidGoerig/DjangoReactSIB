@@ -3,7 +3,7 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-class ProjectCreate extends Component {
+class ProjectCreationHolder extends Component {
   constructor(props) {
       super(props);
       this.fetchDataApp = props.fetchDataApp.bind(this);
@@ -91,4 +91,4 @@ class ProjectCreate extends Component {
 }
 
 
-export default ProjectCreate;
+export default ProjectCreationHolder;
